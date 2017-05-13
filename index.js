@@ -259,7 +259,8 @@ XMPP.prototype.send = function (job, done) {
     self.session.debug('sending message to ' + job.target['@id']);
     client.connection.send(
       job.target['@id'],
-      job.object.content
+      job.object.content,
+      job.target['@type'] === 'room'
     );
     done();
   });
