@@ -515,12 +515,17 @@ XMPP.prototype.__listeners = {
     this.scope.debug("received chat message from " + from);
     this.scope.send({
       '@type': 'send',
-      actor: { '@id': from },
+      actor: {
+        '@type': 'person',
+        '@id': from
+      },
       target: this.credentials.actor,
       object: {
+        '@type': 'message',
         content: message,
         id: nextId()
-      }
+      },
+      published: new Date()
     });
   },
   buddy: function (from, state, statusText) {
