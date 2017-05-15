@@ -524,7 +524,7 @@ XMPP.prototype.__listeners = {
       object: {
         '@type': 'message',
         content: message,
-        id: nextId()
+        '@id': nextId()
       },
       published: new Date()
     });
