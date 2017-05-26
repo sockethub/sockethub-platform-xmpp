@@ -40,5 +40,26 @@ module.exports = [
         '@type': 'person'
       }
     }
+  },
+  {
+    name: 'presence-4',
+    input: '<presence to="hermes@5apps.com/hyperchannel" from="test@muc.5apps.com/greg" xmlns:stream="http://etherx.jabber.org/streams"><c ver="d2rgtMP0QRwWPU4dGU5DEFz5ZmM=" hash="sha-1" node="http://conversations.im" xmlns="http://jabber.org/protocol/caps"/><x xmlns="http://jabber.org/protocol/muc#user"><item role="moderator" affiliation="owner"/></x></presence>',
+    output: {
+      '@type': 'update',
+      actor: {
+        '@id': 'test@muc.5apps.com/greg',
+        '@type': 'person',
+        displayName: 'greg'
+      },
+      target: {
+        '@id': 'test@muc.5apps.com',
+        '@type': 'room'
+      },
+      object: {
+        '@type': 'presence',
+        status: null,
+        presence: 'online'
+      }
+    }
   }
 ];
