@@ -42,8 +42,9 @@ module.exports = [
     }
   },
   {
-    name: 'presence-4',
-    input: '<presence to="hermes@5apps.com/hyperchannel" from="test@muc.5apps.com/greg" xmlns:stream="http://etherx.jabber.org/streams"><c ver="d2rgtMP0QRwWPU4dGU5DEFz5ZmM=" hash="sha-1" node="http://conversations.im" xmlns="http://jabber.org/protocol/caps"/><x xmlns="http://jabber.org/protocol/muc#user"><item role="moderator" affiliation="owner"/></x></presence>',
+    name: 'groupbuddy event',
+    input: ['test@muc.5apps.com', 'greg', 'online', 'hey, wazzup?'],
+    handler: 'groupbuddy',
     output: {
       '@type': 'update',
       actor: {
@@ -57,7 +58,7 @@ module.exports = [
       },
       object: {
         '@type': 'presence',
-        status: null,
+        status: 'hey, wazzup?',
         presence: 'online'
       }
     }
