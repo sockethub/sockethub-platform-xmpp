@@ -9,18 +9,10 @@ define(['require'], function (require) {
     desc: "takes a list of paired data (incoming and expected result) to build a series of tests",
     abortOnFail: true,
     setup: function (env, test) {
-      // load session manager
-      env.session = require('./../node_modules/sockethub-testing-mocks/mock-session')(test);
-      test.assertTypeAnd(env.session.store.get, 'function');
-      test.assertTypeAnd(env.session.store.save, 'function');
-
       // irc-factory mock
       env.xmpp = require('./mock-simple-xmpp')(test);
       env.xmpp.mock = true;
       global.xmpp = env.xmpp;
-
-      var Platform = require('./../index');
-      env.platform = new Platform(env.session);
 
       env.actor = {
         '@type': 'person',
@@ -38,6 +30,12 @@ define(['require'], function (require) {
           resource: 'home'
         }
       };
+
+      var Platform = require('./../index');
+      env.platform = new Platform({
+        id: env.actor.actor,
+        debug: console.log
+      });
 
       test.assertTypeAnd(env.xmpp, 'object');
       test.assertType(env.xmpp.connect, 'function');
@@ -64,10 +62,10 @@ define(['require'], function (require) {
           } else {
             inputParams = entry.input; // array of params
           }
-          env.session.callOnNext('send', function (msg) {
+          env.platform.sendToClient = function (msg) {
             test.assert(msg, entry.output);
-          });
-          env.platform.__listeners[entry.handler || "stanza"].apply({ scope: env.session }, inputParams);
+          };
+          env.platform.__listenerHandlers[entry.handler || "stanza"].apply(env.platform, inputParams);
         }
       })
     })
