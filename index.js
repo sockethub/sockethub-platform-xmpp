@@ -481,7 +481,7 @@ XMPP.prototype['make-friend'] = function (job, credentials, done) {
  *    }
  *  }
  */
-XMPP.prototype.observe = function (job, done) {
+XMPP.prototype.observe = function (job, credentials, done) {
   this.debug('observe() called by ' + job.actor['@id'] + ' for ' + job.target['@id']);
   this.__getClient(job.actor['@id'], credentials, (err, client) => {
     if (err) { return done(err); }
@@ -595,7 +595,7 @@ XMPP.prototype.__connect = function (key, credentials, cb) {
     xmpp.removeListener('error', handlers.error);
     xmpp.removeListener('close', handlers.close);
   }
-  
+
   const handlers = {
     error: (error) => {
       let msg = 'failed connecting ' + fullJid;
@@ -717,11 +717,11 @@ XMPP.prototype.__registerListeners = function () {
     }
   });
 
-  client.on('chatstate', (from, name) => {
+  this.__client.on('chatstate', (from, name) => {
     this.debug('received chatstate event: ' + from, name);
   });
 
-  client.on('groupbuddy', (id, groupBuddy, state, statusText) => {
+  this.__client.on('groupbuddy', (id, groupBuddy, state, statusText) => {
     this.debug('received groupbuddy event: ' + id, groupBuddy, state, statusText);
     this.sendToClient({
       '@type': 'update',
@@ -742,7 +742,7 @@ XMPP.prototype.__registerListeners = function () {
     });
   });
 
-  client.on('groupchat', (room, from, message, stamp) => {
+  this.__client.on('groupchat', (room, from, message, stamp) => {
     this.debug('received groupchat event: ' + room, from, message, stamp);
     this.sendToClient({
       '@type': 'send',
@@ -763,11 +763,11 @@ XMPP.prototype.__registerListeners = function () {
     });
   });
 
-  client.on('buddyCapabilities', (id, capabilities) => {
+  this.__client.on('buddyCapabilities', (id, capabilities) => {
     this.debug('received buddyCapabilities: ' + id, capabilities);
   });
 
-  client.on('chat', (from, message) => {
+  this.__client.on('chat', (from, message) => {
     this.debug("received chat message from " + from);
     this.sendToClient({
       '@type': 'send',
@@ -785,7 +785,7 @@ XMPP.prototype.__registerListeners = function () {
     });
   });
 
-  client.on('buddy', (from, state, statusText) => {
+  this.__client.on('buddy', (from, state, statusText) => {
     if (from !== this.actor['@id']) {
       this.debug('received buddy presence update: ' + from + ' - ' + state);
       this.sendToClient({
@@ -801,7 +801,7 @@ XMPP.prototype.__registerListeners = function () {
     }
   });
 
-  client.on('subscribe', (from) => {
+  this.__client.on('subscribe', (from) => {
     this.debug('received subscribe request from ' + from);
     this.sendToClient({
       '@type': "request-friend",
@@ -810,7 +810,7 @@ XMPP.prototype.__registerListeners = function () {
     });
   });
 
-  client.on('unsubscribe', (from) => {
+  this.__client.on('unsubscribe', (from) => {
     this.debug('received unsubscribe request from ' + from);
     this.sendToClient({
       '@type': "remove-friend",
@@ -819,7 +819,7 @@ XMPP.prototype.__registerListeners = function () {
     });
   });
 
-  client.on('close', () => {
+  this.__client.on('close', () => {
     this.debug('received close event with no handler specified');
     this.sendToClient({
       '@type': 'close',
@@ -830,7 +830,7 @@ XMPP.prototype.__registerListeners = function () {
     this.connection.disconnect();
   });
 
-  client.on('error', (error) => {
+  this.__client.on('error', (error) => {
     try {
       this.debug("*** XMPP ERROR (rl): " + error);
       this.sendToClient({
@@ -845,7 +845,7 @@ XMPP.prototype.__registerListeners = function () {
     }
   });
 
-  client.on('online', () => {
+  this.__client.on('online', () => {
     this.debug('online');
     this.debug('reconnectioned ' + this.actor['@id']);
   });
