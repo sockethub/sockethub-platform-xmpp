@@ -20,8 +20,7 @@ if (typeof (xmpp) !== 'object') {
   xmpp = require('simple-xmpp');
 }
 
-const debug       = require('debug')('sockethub-platform-xmpp'),
-      packageJSON = require('./package.json');
+const packageJSON = require('./package.json');
 
 /**
  * @class XMPP
@@ -38,7 +37,7 @@ const debug       = require('debug')('sockethub-platform-xmpp'),
  *
  */
 function XMPP(cfg) {
-  if (! cfg) { return this; }
+  cfg = (typeof cfg === 'object') ? cfg : {}
   this.id = cfg.id; // actor
   this.debug = cfg.debug;
   this.sendToClient = cfg.sendToClient;
@@ -145,6 +144,12 @@ XMPP.prototype.schema = {
     }
   }
 };
+
+
+XMPP.prototype.config = {
+  persist: true
+}
+
 
 let idCounter = 0;
 function nextId() {
