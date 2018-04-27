@@ -500,7 +500,7 @@ XMPP.prototype.observe = function (job, credentials, done) {
     })
     stanza.c('query', { xmlns: 'http://jabber.org/protocol/disco#items' });
 
-    client.send(stanza);
+    client.conn.send(stanza);
 
     done();
   });
