@@ -246,12 +246,12 @@ define(['require'], function (require) {
         run: function (env, test) {
           const originalSend = env.xmpp.conn.send;
           let count = 0;
-          env.xmpp.send = new test.Stub(function(stanza) {
+          env.xmpp.conn.send = new test.Stub(function(stanza) {
             test.assertAnd(stanza.is('iq'), true);
             test.assertAnd(stanza.attrs.id, 'muc_id');
             test.assertAnd(stanza.attrs.from, 'xmpp:testingham@jabber.net');
             test.assertAnd(stanza.attrs.to, 'xmpp:partyroom@jabber.net');
-            env.xmpp.send = originalSend;
+            env.xmpp.conn.send = originalSend;
             count++;
             if (count === 2) { test.done(); }
           });
