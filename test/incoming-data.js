@@ -44,7 +44,7 @@ module.exports = [
   {
     name: 'groupbuddy event',
     input: ['test@muc.5apps.com', 'greg', 'online', 'hey, wazzup?'],
-    handler: 'groupbuddy',
+    handler: 'groupBuddy',
     output: {
       '@type': 'update',
       actor: {
