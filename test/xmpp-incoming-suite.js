@@ -52,7 +52,7 @@ define(['require'], function (require) {
     var data = require('./incoming-data');
     var ltx = require('ltx');
     var tests = [];
-    data.forEach(function(entry) {
+    data.forEach((entry) => {
       tests.push({
         desc: '# incoming data: ' + entry.name,
         run: function (env, test) {
@@ -65,10 +65,12 @@ define(['require'], function (require) {
           env.platform.sendToClient = function (msg) {
             test.assert(msg, entry.output);
           };
-          env.platform.__listenerHandlers[entry.handler || "stanza"].apply(env.platform, inputParams);
+          const func  = entry.handler || '__stanza';
+          console.log('function: ' + func, typeof env.platform.__ih[func]);
+          env.platform.__ih[func](...inputParams);
         }
       })
-    })
+    });
     return tests;
   }
 
