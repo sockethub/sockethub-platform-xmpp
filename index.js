@@ -54,40 +54,6 @@ function buidXmppCredentials(fullJid, credentials) {
   return xmpp_creds;
 }
 
-function buildFullJid(credentials) {
-  let fullJid;
-
-  // generate bareJid and fullJid
-  if (credentials.object.username.indexOf('@') === -1) {
-    fullJid = credentials.object.username + '@' + credentials.object.server + '/' + credentials.object.resource;
-  } else {
-    fullJid = credentials.object.username + '/' + credentials.object.resource;
-  }
-
-  return fullJid;
-}
-
-function buidXmppCredentials(fullJid, credentials) {
-  // credential object to pass to simple-xmpp
-  let xmpp_creds = {
-    jid: fullJid,
-    password: credentials.object.password
-  };
-
-  if (credentials.object.server) {
-    xmpp_creds.host = credentials.object.server;
-  }
-
-  if (credentials.port) {
-    xmpp_creds.port = credentials.object.port;
-  }
-
-  return xmpp_creds;
-}
-
-function nextId() {
-  return ++idCounter;
-}
 
 /**
  * @class XMPP
@@ -649,6 +615,7 @@ class XMPP {
         __removeListeners();
         cb('received close event for ' + fullJid);
       }
+    };
 
     xmpp.on('online', handlers.online);
     xmpp.on('error', handlers.error);
