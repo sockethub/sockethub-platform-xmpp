@@ -36,7 +36,7 @@ function buildFullJid(credentials) {
   return fullJid;
 }
 
-function buidXmppCredentials(fullJid, credentials) {
+function buildXmppCredentials(fullJid, credentials) {
   // credential object to pass to simple-xmpp
   let xmpp_creds = {
     jid: fullJid,
@@ -587,7 +587,7 @@ class XMPP {
     this.debug('calling connect for ' + credentials.actor['@id']);
 
     const fullJid = buildFullJid(credentials);
-    const xmppCreds = buidXmppCredentials(fullJid, credentials);
+    const xmppCreds = buildXmppCredentials(fullJid, credentials);
 
     function __removeListeners() {
       xmpp.removeListener('online', handlers.online);
