@@ -82,7 +82,4 @@ define(['require'], function (require) {
   return suites;
 });
 
-'{"@type":"send","actor":{"@type":"person","@id":"radical@example.org"},"target":"user@jabber.org","object":{"@type":"message","content":"ohai","@id":1}}'
-'{"@type":"send","actor":{"@type":"person","@id":"radical@example.org"},"target":{"@id":"user@jabber.org"},"object":{"@type":"message","content":"ohai","@id":1}}'
-
 
