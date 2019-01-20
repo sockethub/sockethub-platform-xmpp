@@ -11,6 +11,7 @@ define(['require'], function (require) {
     setup: function (env, test) {
       // irc-factory mock
       env.xmpp = require('./mock-simple-xmpp')(test);
+      env.IncomingHandlers = require('./../lib/incoming-handlers');
       env.xmpp.mock = true;
       global.xmpp = env.xmpp;
 
@@ -36,6 +37,7 @@ define(['require'], function (require) {
         id: env.actor.actor,
         debug: console.log
       });
+      env.platform.actor = 'user@jabber.org';
 
       test.assertTypeAnd(env.xmpp, 'object');
       test.assertType(env.xmpp.connect, 'function');
@@ -63,11 +65,14 @@ define(['require'], function (require) {
             inputParams = entry.input; // array of params
           }
           env.platform.sendToClient = function (msg) {
+            console.log('sendToClient: ', msg);
+            console.log('expected:', entry.output);
             test.assert(msg, entry.output);
           };
           const func  = entry.handler || '__stanza';
-          console.log('function: ' + func, typeof env.platform.__ih[func]);
-          env.platform.__ih[func](...inputParams);
+          const ih = new env.IncomingHandlers(env.platform, 'user@jabber.org');
+          console.log('function: ' + func, typeof ih[func]);
+          ih[func](...inputParams);
         }
       })
     });
@@ -76,3 +81,8 @@ define(['require'], function (require) {
 
   return suites;
 });
+
+'{"@type":"send","actor":{"@type":"person","@id":"radical@example.org"},"target":"user@jabber.org","object":{"@type":"message","content":"ohai","@id":1}}'
+'{"@type":"send","actor":{"@type":"person","@id":"radical@example.org"},"target":{"@id":"user@jabber.org"},"object":{"@type":"message","content":"ohai","@id":1}}'
+
+
