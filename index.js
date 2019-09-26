@@ -254,8 +254,9 @@ class XMPP {
     this.__getClient(job.actor['@id'], credentials, (client) => {
       // send join
       this.debug('sending join to ' + `${job.target['@id']}/${job.actor.displayName}`);
+      let id = job.target['@id'].split('/')[0];
       client.join(
-          `${job.target['@id']}/${job.actor.displayName}`
+          `${job.target['@id']}/${job.actor.displayName || id}`
           // TODO optional passwords not handled for now
       );
       done();
@@ -316,6 +317,7 @@ class XMPP {
    */
   send(job, credentials, done) {
     this.debug('send() called for ' + job.actor['@id']);
+    this.debug(job);
     this.__getClient(job.actor['@id'], credentials, (client) => {
       // send message
       this.debug('sending message to ' + job.target['@id']);
