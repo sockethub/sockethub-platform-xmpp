@@ -317,7 +317,6 @@ class XMPP {
    */
   send(job, credentials, done) {
     this.debug('send() called for ' + job.actor['@id']);
-    this.debug(job);
     this.__getClient(job.actor['@id'], credentials, (client) => {
       // send message
       this.debug('sending message to ' + job.target['@id']);
