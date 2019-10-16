@@ -4,6 +4,33 @@ if(typeof(define) !== 'function') {
 define(['require'], function (require) {
   var suites = [];
 
+
+  suites.push({
+    name: "helper function tests",
+    desc: "collection of tests for the xmpp platform helper functions",
+    abortOnFail: true,
+    setup: function (env, test) {
+      env.Platform = require('./../index');
+      test.done();
+    },
+    tests: [
+      {
+        desc: 'buildXmppCredentials',
+        run: function (env, test) {
+          const p = new env.Platform('foo');
+          test.assert(p.__buildXmppCredentials('foo', {object:{port:123, server:'foo', password:'bar'}}),
+              {
+                jid: 'foo',
+                password: 'bar',
+                host: 'foo',
+                port: 123
+              }, false);
+        }
+      }
+    ]
+  });
+
+
   suites.push({
     name: "xmpp platform tests",
     desc: "collection of tests for the xmpp platform",
