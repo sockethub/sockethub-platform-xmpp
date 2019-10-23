@@ -38,7 +38,6 @@ define(['require'], function (require) {
     setup: function (env, test) {
       env.tv4 = require('./../node_modules/tv4/tv4');
 
-      // irc-factory mock
       env.xmpp = require('./mock-simple-xmpp')(test);
       env.xmpp.mock = true;
       global.xmpp = env.xmpp;
